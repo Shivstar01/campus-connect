@@ -9,11 +9,15 @@ export const CartProvider = ({ children }) => {
 
   // Function to add item to cart
   const addToCart = (item) => {
-    setCart([...cart, item]); // Add new item to existing list
-  };
+    setCart([...cart, item]); };// Add new item to existing list
+
+    const clearCart =()=>{
+      setCart([]);
+    };
+  
 
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider value={{ cart, addToCart ,clearCart }}>
       {children}
     </CartContext.Provider>
   );

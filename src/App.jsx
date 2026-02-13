@@ -2,7 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from './Home';
 import Menu from './Menu';
 import Cart from './Cart'; // <--- 1. Import Cart
-
+import Checkout from './Checkout';
 import { useContext } from 'react';
 import { CartContext } from './CartContext';
 
@@ -33,7 +33,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} /> {/* <--- 2. Add Route */}
+        <Route path ="/checkout" element ={<Checkout />}/>
+        
       </Routes>
+
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom';
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
@@ -15,6 +16,11 @@ function Cart() {
           <div key={index} style={{ borderBottom: "1px solid #ccc", padding: "10px", display: "flex", justifyContent: "space-between" }}>
             <span>{item.name}</span>
             <span style={{ fontWeight: "bold" }}>{item.price}</span>
+            <Link to="/checkout">
+          <button style={{ padding: "10px", background: "green", color: "white", margin:"10px" }}>
+            Proceed to Checkout
+          </button>
+        </Link>
           </div>
         ))
       )}

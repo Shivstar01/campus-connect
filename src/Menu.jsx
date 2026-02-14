@@ -1,5 +1,7 @@
 import { useState, useContext } from 'react'; // 1. Import useContext
 import { CartContext } from './CartContext'; // 2. Import the Brain
+import {Link} from 'react-router-dom';
+
 
 function Menu() {
   const [foodItems] = useState([
@@ -32,6 +34,11 @@ function Menu() {
               >
                 Add +
               </button>
+              <Link to="/orders">
+        <button style={{ background: "blue", color: "white", padding: "10px", margin: "10px" }}>
+          View Kitchen Orders
+        </button>
+      </Link>
               
             </div>
           </div>

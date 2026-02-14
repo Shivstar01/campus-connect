@@ -5,6 +5,7 @@ import Cart from './Cart'; // <--- 1. Import Cart
 import Checkout from './Checkout';
 import { useContext } from 'react';
 import { CartContext } from './CartContext';
+import Orders from './Orders';
 
 function CartIcon() {
   const { cart } = useContext(CartContext);
@@ -34,7 +35,7 @@ function App() {
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} /> {/* <--- 2. Add Route */}
         <Route path ="/checkout" element ={<Checkout />}/>
-        
+        <Route path ="/orders" element ={<Orders />} />
       </Routes>
 
     </div>

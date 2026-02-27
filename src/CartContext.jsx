@@ -1,29 +1,45 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from 'react';
 
-// 1. Create the Context (The "Radio Station")
 export const CartContext = createContext();
 
-// 2. Create the Provider (The "Broadcast Tower")
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]); // This state lives globally!
-
-  const [orders , setOrders] = useState([]);
-
-  // Function to add item to cart
-  const addToCart = (item) => {
-    setCart([...cart, item]); };// Add new item to existing list
-
-    const clearCart =()=>{
-      setCart([]);
-    };
-
-    const addOrder=(newOrder)=>{
-      setOrders([...orders , newOrder])
-    };
   
+  // 1. INITIALIZATION: Instead of starting empty, check the browser's hard drive first!
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('campusCart');
+    return savedCart ? JSON.parse(savedCart) : []; // If data exists, parse it. If not, empty array.
+  });
+
+  const [orders, setOrders] = useState(() => {
+    const savedOrders = localStorage.getItem('campusOrders');
+    return savedOrders ? JSON.parse(savedOrders) : [];
+  });
+
+  // 2. THE WATCHERS: Every time 'cart' changes, save the new version to localStorage
+  useEffect(() => {
+    localStorage.setItem('campusCart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Every time 'orders' change, save the new version to localStorage
+  useEffect(() => {
+    localStorage.setItem('campusOrders', JSON.stringify(orders));
+  }, [orders]);
+
+  // 3. THE FUNCTIONS (These stay exactly the same!)
+  const addToCart = (item) => {
+    setCart((prevCart) => [...prevCart, item]);
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const addOrder = (newOrder) => {
+    setOrders((prevOrders) => [...prevOrders, newOrder]);
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart ,clearCart , orders , addOrder }}>
+    <CartContext.Provider value={{ cart, orders, addToCart, clearCart, addOrder }}>
       {children}
     </CartContext.Provider>
   );

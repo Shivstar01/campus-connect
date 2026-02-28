@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 const Menu = () => {
   const { addToCart, cart } = useContext(CartContext);
   
-  // 🟢 NEW: State for our Search Bar and Categories
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  // 🟢 NEW: Expanded Menu with Categories
+  
   const [foodItems] = useState([
     { id: 1, name: "Hostel Maggi", price: 40, category: "Snacks" },
     { id: 2, name: "Chicken Biryani", price: 150, category: "Meals" },
@@ -21,7 +21,7 @@ const Menu = () => {
 
   const categories = ["All", "Snacks", "Meals", "Drinks"];
 
-  // 🟢 NEW: The Filter Engine (Runs instantly when you type or click a category)
+  
   const filteredItems = foodItems.filter(item => {
     const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -31,7 +31,7 @@ const Menu = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 font-sans pb-24">
       
-      {/* 🟢 THE HEADER */}
+      
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-black text-gray-800 tracking-tight">CampusConnect</h1>
@@ -47,7 +47,7 @@ const Menu = () => {
         </div>
       </div>
 
-      {/* 🟢 HERO BANNER */}
+      
       <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-md mb-6">
         <h2 className="text-xl font-black mb-1">Late Night Cravings?</h2>
         <p className="text-sm font-medium opacity-90 mb-4">Get it delivered in 10 mins flat.</p>
@@ -56,7 +56,7 @@ const Menu = () => {
         </button>
       </div>
 
-      {/* 🟢 SEARCH BAR */}
+      
       <div className="mb-6">
         <input 
           type="text" 
@@ -67,7 +67,7 @@ const Menu = () => {
         />
       </div>
 
-      {/* 🟢 CATEGORY SCROLL */}
+      
       <div className="flex overflow-x-auto gap-3 mb-6 pb-2 scrollbar-hide">
         {categories.map(cat => (
           <button 
@@ -84,7 +84,7 @@ const Menu = () => {
         ))}
       </div>
 
-      {/* 🟢 THE FOOD GRID */}
+      
       <div className="grid grid-cols-2 gap-4">
         {filteredItems.length === 0 ? (
           <p className="col-span-2 text-center text-gray-500 py-10">No items found! 😢</p>

@@ -3,7 +3,7 @@ import { CartContext } from './CartContext';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
-  // We grab the cart, and the removeFromCart tool if you added it earlier!
+
   const { cart, removeFromCart } = useContext(CartContext);
 
   // Calculate the total dynamically
@@ -12,7 +12,7 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 font-sans flex flex-col">
       
-      {/* 🟢 THE HEADER */}
+      
       <div className="flex items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <Link to="/" className="text-gray-400 font-bold mr-4 hover:text-gray-800 transition">
           ← Back
@@ -20,10 +20,9 @@ const Cart = () => {
         <h1 className="text-2xl font-black text-gray-800 tracking-tight">Your Cart</h1>
       </div>
 
-      {/* 🟢 THE LOGIC: Is the cart empty? */}
+      
       {cart.length === 0 ? (
         
-        /* THE EMPTY STATE UI */
         <div className="flex-grow flex flex-col items-center justify-center text-center mt-10">
           <div className="text-6xl mb-4">🛒</div>
           <h2 className="text-xl font-bold text-gray-700 mb-2">Cart is empty!</h2>
@@ -35,10 +34,9 @@ const Cart = () => {
 
       ) : (
 
-        /* THE FILLED CART UI */
         <div className="flex-grow flex flex-col gap-3">
           
-          {/* The List of Items */}
+          
           {cart.map((item, index) => (
             <div key={index} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
               <div>
@@ -46,7 +44,7 @@ const Cart = () => {
                 <p className="text-gray-500 font-medium">₹{item.price}</p>
               </div>
               
-              {/* Optional Remove Button (only shows if you have the removeFromCart function) */}
+              
               {removeFromCart && (
                 <button 
                   onClick={() => removeFromCart(index)}
@@ -58,7 +56,7 @@ const Cart = () => {
             </div>
           ))}
 
-          {/* THE BILLING & CHECKOUT SECTION */}
+         
           <div className="mt-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
               <span className="text-gray-500 font-bold text-lg">Item Total</span>

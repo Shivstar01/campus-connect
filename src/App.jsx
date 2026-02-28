@@ -1,7 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import Home from './Home';
 import Menu from './Menu';
-import Cart from './Cart'; // <--- 1. Import Cart
+import Cart from './Cart';
 import Checkout from './Checkout';
 import { useContext } from 'react';
 import { CartContext } from './CartContext';
@@ -10,14 +10,13 @@ import Orders from './Orders';
 function CartIcon() {
   const { cart } = useContext(CartContext);
   return (
-    // 3. Make the "Cart "  text clickable
+   
     <Link to="/cart" style={{ fontWeight: "bold", textDecoration: "none", color: "black" }}>
        🛒 Cart: {cart.length}
     </Link>
   );
 }
 
-//test
 
 function App() {
   return (

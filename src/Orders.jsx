@@ -5,7 +5,7 @@ const Orders = () => {
   const [liveOrders, setLiveOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // This fetches the orders just like before
+  
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -24,15 +24,15 @@ const Orders = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // THE NEW FUNCTION: Firing the PUT request
+  
   const handleComplete = async (orderId) => {
     try {
-      // 1. Send the PUT request to the server with the specific order ID
+      
       await fetch(`http://localhost:5000/api/orders/${orderId}`, {
         method: 'PUT'
       });
 
-      // 2. Instantly remove it from the React screen so the user doesn't have to wait for the next refresh
+      
       setLiveOrders((prevOrders) => prevOrders.filter(order => order._id !== orderId));
       
     } catch (error) {
@@ -59,7 +59,7 @@ const Orders = () => {
       ) : (
         <div className="flex flex-col gap-4">
           {liveOrders.map((order, index) => (
-            // Notice we use order._id for the key now, which is MongoDB's unique identifier
+           
             <div key={order._id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-500"></div>
               <div className="flex justify-between items-start mb-3">
@@ -78,7 +78,6 @@ const Orders = () => {
                 <div className="text-right">
                   <p className="text-xl font-black text-green-500 mb-2">₹{order.orderTotal}</p>
                   
-                  {/* THE NEW BUTTON */}
                   <button 
                     onClick={() => handleComplete(order._id)}
                     className="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-lg shadow-sm hover:bg-green-600 active:scale-95 transition-all"

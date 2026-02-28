@@ -10,14 +10,14 @@ const Checkout = () => {
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  // 🟢 NEW: Notice the "async" keyword here! It allows us to "await" the server's response.
+ 
   const handlePlaceOrder = async () => {
     if (name.trim() === "" || room.trim() === "") {
       alert("Please enter your name and room number!");
       return; 
     }
 
-    // 1. Package the data exactly how the server expects it
+    
     const newOrder = {
       customerName: name,
       roomNumber: room,
@@ -26,21 +26,21 @@ const Checkout = () => {
     };
 
     try {
-      // 2. THE BRIDGE: Shoot the data to Port 5000 using fetch()
+      
       const response = await fetch('http://localhost:5000/api/orders', {
-        method: 'POST', // We are SENDING data, not getting it.
+        method: 'POST', 
         headers: {
-          'Content-Type': 'application/json', // Telling the server "Hey, this is JSON data!"
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newOrder), // Converting our JavaScript object into a JSON string
+        body: JSON.stringify(newOrder), 
       });
 
-      // 3. Wait to see what the server replies with
+      
       const data = await response.json();
 
-      // 4. If the server says "success: true" (which we programmed it to do!)
+      
       if (data.success) {
-        addOrder(newOrder); // Keep our local frontend Kitchen working
+        addOrder(newOrder);
         alert(`Order sent to server! Receipt: ${data.message}`);
         clearCart();
         navigate('/');
@@ -49,7 +49,6 @@ const Checkout = () => {
       }
 
     } catch (error) {
-      // If the server is turned off, this catches the crash so the app doesn't break
       console.error("Connection error:", error);
       alert("Could not connect to the backend! Is your server running?");
     }

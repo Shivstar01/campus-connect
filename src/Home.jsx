@@ -1,45 +1,53 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
 
 const Home = () => {
+  
+  const { user, logout } = useContext(AuthContext);
+
   return (
-    
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 to-red-500 flex flex-col items-center justify-center p-6 font-sans text-center relative overflow-hidden">
-      
-      {/* Decorative background emojis to give it that food-app vibe */}
-      <div className="absolute top-10 left-10 text-6xl opacity-20 transform -rotate-12">🍔</div>
-      <div className="absolute top-20 right-10 text-7xl opacity-20 transform rotate-12">🍕</div>
-      <div className="absolute bottom-20 left-16 text-6xl opacity-20 transform rotate-45">🍟</div>
-      <div className="absolute bottom-32 right-12 text-7xl opacity-20 transform -rotate-12">🥤</div>
-
-      
-      <div className="relative z-10 flex flex-col items-center">
-        
-        <div className="bg-white p-6 rounded-full shadow-2xl mb-6 flex items-center justify-center">
-          <span className="text-5xl">🛵</span>
-        </div>
-
-        <h1 className="text-5xl font-black text-white tracking-tight mb-2 drop-shadow-md">
-          CampusConnect
-        </h1>
-        
-        <p className="text-lg text-white font-medium opacity-90 mb-10 max-w-xs drop-shadow-sm">
-          Skip the mess line. Get late-night cravings delivered to your hostel block in 10 minutes.
-        </p>
+    <div className="min-h-screen bg-orange-500 flex flex-col items-center justify-center p-4 font-sans text-center">
+      <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full">
+        <div className="text-6xl mb-6">🍔</div>
+        <h1 className="text-4xl font-black text-gray-800 tracking-tight mb-2">CampusConnect</h1>
+        <p className="text-gray-500 font-medium mb-8">Hyper-local food delivery for your hostel.</p>
 
         
-        <Link 
-          to="/menu" 
-          className="bg-white text-orange-600 px-10 py-4 rounded-full text-xl font-black shadow-xl hover:scale-105 hover:shadow-2xl active:scale-95 transition-all w-full max-w-xs"
-        >
-          Explore Menu ➔
-        </Link>
+        {user ? (
+          <div className="space-y-4">
+            <p className="text-lg font-bold text-gray-700">Welcome back, {user.name}!</p>
+            
+            
+            {user.role === 'admin' ? (
+              <Link to="/orders" className="block w-full bg-orange-500 text-white text-xl font-black py-4 rounded-xl shadow-md hover:bg-orange-600 active:scale-95 transition-all">
+                Go to Kitchen Dashboard
+              </Link>
+            ) : (
+              <Link to="/menu" className="block w-full bg-orange-500 text-white text-xl font-black py-4 rounded-xl shadow-md hover:bg-orange-600 active:scale-95 transition-all">
+                Order Food Now
+              </Link>
+            )}
+            
+            <button 
+              onClick={logout}
+              className="block w-full bg-gray-100 text-gray-600 text-lg font-bold py-3 rounded-xl hover:bg-gray-200 transition-all"
+            >
+              Log Out
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            
+            <Link to="/login" className="block w-full bg-orange-500 text-white text-xl font-black py-4 rounded-xl shadow-md hover:bg-orange-600 active:scale-95 transition-all">
+              Log In
+            </Link>
+            <Link to="/signup" className="block w-full bg-orange-100 text-orange-600 text-xl font-black py-4 rounded-xl shadow-sm hover:bg-orange-200 active:scale-95 transition-all">
+              Create an Account
+            </Link>
+          </div>
+        )}
       </div>
-
-    
-      <div className="absolute bottom-6 text-white text-sm font-medium opacity-70">
-        Built for the campus late-nighters.
-      </div>
-
     </div>
   );
 };

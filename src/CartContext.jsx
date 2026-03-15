@@ -3,8 +3,6 @@ import { createContext, useState, useEffect } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  
-
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('campusCart');
     return savedCart ? JSON.parse(savedCart) : []; 
@@ -15,19 +13,55 @@ export const CartProvider = ({ children }) => {
     return savedOrders ? JSON.parse(savedOrders) : [];
   });
 
-  
   useEffect(() => {
     localStorage.setItem('campusCart', JSON.stringify(cart));
   }, [cart]);
 
-  
   useEffect(() => {
     localStorage.setItem('campusOrders', JSON.stringify(orders));
   }, [orders]);
 
   
-  const addToCart = (item) => {
-    setCart((prevCart) => [...prevCart, item]);
+  const addToCart = (itemToAdd) => {
+    setCart((prevCart) => {
+      
+      const existingItemIndex = prevCart.findIndex(item => item._id === itemToAdd._id);
+      
+      if (existingItemIndex >= 0) {
+       
+        const updatedCart = [...prevCart];
+        updatedCart[existingItemIndex].quantity += 1;
+        return updatedCart;
+      } else {
+       
+        return [...prevCart, { ...itemToAdd, quantity: 1 }];
+      }
+    });
+  };
+
+  
+  const updateQuantity = (index, delta) => {
+    setCart((prevCart) => {
+      const updatedCart = [...prevCart];
+      const newQuantity = updatedCart[index].quantity + delta;
+      
+      if (newQuantity <= 0) {
+        
+        updatedCart.splice(index, 1);
+      } else {
+        updatedCart[index].quantity = newQuantity;
+      }
+      return updatedCart;
+    });
+  };
+
+  
+  const removeFromCart = (index) => {
+    setCart((prevCart) => {
+      const updatedCart = [...prevCart];
+      updatedCart.splice(index, 1);
+      return updatedCart;
+    });
   };
 
   const clearCart = () => {
@@ -39,7 +73,15 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, orders, addToCart, clearCart, addOrder }}>
+    <CartContext.Provider value={{ 
+      cart, 
+      orders, 
+      addToCart, 
+      updateQuantity, 
+      removeFromCart, 
+      clearCart, 
+      addOrder 
+    }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Define the structure for a user in the database
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true // Prevents two people from signing up with the same email
+    unique: true 
   },
   password: {
     type: String,
@@ -17,11 +17,11 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'admin'], // The user must be one of these two roles
-    default: 'student' // If not specified, they are a normal student
+    enum: ['student', 'admin'], 
+    default: 'student' 
   }
 }, { 
-  // This automatically adds createdAt and updatedAt timestamps
+  
   timestamps: true 
 });
 

@@ -20,8 +20,14 @@ const orderSchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    default: 'New'
+    enum: ['pending', 'preparing', 'ready'],
+    default: 'pending'
   },
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'    
+  },
+  
   createdAt: { 
     type: Date, 
     default: Date.now 

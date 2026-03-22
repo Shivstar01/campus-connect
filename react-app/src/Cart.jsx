@@ -9,6 +9,8 @@ const Cart = () => {
   
   const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
+  
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 font-sans flex flex-col">
       <div className="flex items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">

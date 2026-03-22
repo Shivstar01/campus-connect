@@ -8,7 +8,7 @@ const Checkout = () => {
   const [room, setRoom] = useState('');
   const navigate = useNavigate();
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
  
   const handlePlaceOrder = async () => {
@@ -27,7 +27,7 @@ const Checkout = () => {
 
     try {
       
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',

@@ -5,7 +5,7 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('campusCart');
-    return savedCart ? JSON.parse(savedCart) : []; 
+    return savedCart ? JSON.parse(savedCart) : [];
   });
 
   const [orders, setOrders] = useState(() => {
@@ -21,66 +21,56 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('campusOrders', JSON.stringify(orders));
   }, [orders]);
 
-  
   const addToCart = (itemToAdd) => {
+    
     setCart((prevCart) => {
-      
-      const existingItemIndex = prevCart.findIndex(item => item._id === itemToAdd._id);
+     
+      const existingItemIndex = prevCart.findIndex(
+        (item) => item._id === itemToAdd._id
+      );
       
       if (existingItemIndex >= 0) {
-       
-        const updatedCart = [...prevCart];
-        updatedCart[existingItemIndex].quantity += 1;
-        return updatedCart;
+        return prevCart.map((item, index) =>
+          index === existingItemIndex
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
       } else {
-       
         return [...prevCart, { ...itemToAdd, quantity: 1 }];
       }
     });
   };
 
-  
   const updateQuantity = (index, delta) => {
-    setCart((prevCart) => {
-      const updatedCart = [...prevCart];
-      const newQuantity = updatedCart[index].quantity + delta;
-      
-      if (newQuantity <= 0) {
-        
-        updatedCart.splice(index, 1);
-      } else {
-        updatedCart[index].quantity = newQuantity;
-      }
-      return updatedCart;
-    });
-  };
-
-  
+  setCart((prevCart) => {
+    const newQuantity = prevCart[index].quantity + delta;
+    if (newQuantity <= 0) {
+      return prevCart.filter((_, i) => i !== index);
+    }
+    return prevCart.map((item, i) =>
+      i === index ? { ...item, quantity: newQuantity } : item
+    );
+  });
+};
   const removeFromCart = (index) => {
-    setCart((prevCart) => {
-      const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1);
-      return updatedCart;
-    });
+    setCart((prevCart) => prevCart.filter((_, i) => i !== index));
   };
 
-  const clearCart = () => {
-    setCart([]);
-  };
+  const clearCart = () => setCart([]);
 
   const addOrder = (newOrder) => {
     setOrders((prevOrders) => [...prevOrders, newOrder]);
   };
 
   return (
-    <CartContext.Provider value={{ 
-      cart, 
-      orders, 
-      addToCart, 
-      updateQuantity, 
-      removeFromCart, 
-      clearCart, 
-      addOrder 
+    <CartContext.Provider value={{
+      cart,
+      orders,
+      addToCart,
+      updateQuantity,
+      removeFromCart,
+      clearCart,
+      addOrder
     }}>
       {children}
     </CartContext.Provider>

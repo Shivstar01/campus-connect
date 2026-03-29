@@ -11,12 +11,12 @@ const Menu = () => {
 
   
   const [foodItems] = useState([
-    { id: 1, name: "Hostel Maggi", price: 40, category: "Snacks" },
-    { id: 2, name: "Chicken Biryani", price: 150, category: "Meals" },
-    { id: 3, name: "Kulhad Chai", price: 20, category: "Drinks" },
-    { id: 4, name: "Paneer Roll", price: 80, category: "Snacks" },
-    { id: 5, name: "Cold Coffee", price: 60, category: "Drinks" },
-    { id: 6, name: "Veg Thali", price: 120, category: "Meals" }
+    { _id: 1, name: "Hostel Maggi", price: 40, category: "Snacks" },
+    { _id: 2, name: "Chicken Biryani", price: 150, category: "Meals" },
+    { _id: 3, name: "Kulhad Chai", price: 20, category: "Drinks" },
+    { _id: 4, name: "Paneer Roll", price: 80, category: "Snacks" },
+    { _id: 5, name: "Cold Coffee", price: 60, category: "Drinks" },
+    { _id: 6, name: "Veg Thali", price: 120, category: "Meals" }
   ]);
 
   const categories = ["All", "Snacks", "Meals", "Drinks"];

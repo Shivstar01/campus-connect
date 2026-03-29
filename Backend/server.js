@@ -21,7 +21,8 @@ mongoose.connect(process.env.MONGO_URI)
 
   app.post('/api/auth/signup', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
+    const role = email === 'admin@campus.com' ? 'admin' : 'student';
 
     
     const existingUser = await User.findOne({ email });

@@ -9,7 +9,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/orders');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
         const data = await response.json();
         setLiveOrders(data);
         setLoading(false);
@@ -28,7 +28,7 @@ const Orders = () => {
   const handleComplete = async (orderId) => {
     try {
       
-      await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, {
         method: 'PUT'
       });
 

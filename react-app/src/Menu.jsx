@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { CartContext } from './CartContext';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Menu = () => {
   const { addToCart, cart } = useContext(CartContext);
@@ -9,15 +10,25 @@ const Menu = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  
-  const [foodItems] = useState([
-    { _id: 1, name: "Hostel Maggi", price: 40, category: "Snacks" },
-    { _id: 2, name: "Chicken Biryani", price: 150, category: "Meals" },
-    { _id: 3, name: "Kulhad Chai", price: 20, category: "Drinks" },
-    { _id: 4, name: "Paneer Roll", price: 80, category: "Snacks" },
-    { _id: 5, name: "Cold Coffee", price: 60, category: "Drinks" },
-    { _id: 6, name: "Veg Thali", price: 120, category: "Meals" }
-  ]);
+  const [foodItems, setFoodItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+ 
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/menu`);
+        const data = await response.json();
+        setFoodItems(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Menu Fetch Error:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchMenu();
+  }, []);
+
 
   const categories = ["All", "Snacks", "Meals", "Drinks"];
 
@@ -28,10 +39,17 @@ const Menu = () => {
     return matchesCategory && matchesSearch;
   });
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans">
+        <p className="text-xl font-bold text-gray-500 animate-pulse">Loading menu from database...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 font-sans pb-24">
-      
-      
+
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-black text-gray-800 tracking-tight">CampusConnect</h1>

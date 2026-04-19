@@ -49,7 +49,6 @@ const Menu = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 font-sans pb-24">
-
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-black text-gray-800 tracking-tight">CampusConnect</h1>

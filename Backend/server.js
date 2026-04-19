@@ -5,9 +5,13 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const Order = require('./models/Order');
-const User = require('./models/User');
+const Order    = require('./models/Order');
+const User     = require('./models/User');
 const MenuItem = require('./models/MenuItem');
+
+// ─── New Super-App Routes ────────────────────────────────────
+const vendorRoutes  = require('./routes/vendorRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 
@@ -18,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to the MongoDB Vault!'))
   .catch((err) => console.error('MongoDB Connection Error:', err));
 
-// ─── AUTH ROUTES ────────────────────────────────────────────
+// ─── AUTH ROUTES ─────────────────────────────────────────────
 app.post('/api/auth/signup', async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -78,7 +82,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// ─── MENU ROUTES ────────────────────────────────────────────
+// ─── MENU ROUTES (legacy — kept for backwards compatibility) ──
 app.get('/api/menu', async (req, res) => {
   try {
     const items = await MenuItem.find({ isAvailable: true });
@@ -101,15 +105,15 @@ app.post('/api/menu', async (req, res) => {
   }
 });
 
-// ─── ORDER ROUTES ────────────────────────────────────────────
+// ─── ORDER ROUTES ─────────────────────────────────────────────
 app.post('/api/orders', async (req, res) => {
   try {
     const incomingOrder = req.body;
     const newOrder = new Order({
       customerName: incomingOrder.customerName,
-      roomNumber: incomingOrder.roomNumber,
-      foodItems: incomingOrder.foodItems,
-      orderTotal: incomingOrder.orderTotal
+      roomNumber:   incomingOrder.roomNumber,
+      foodItems:    incomingOrder.foodItems,
+      orderTotal:   incomingOrder.orderTotal
     });
     await newOrder.save();
     res.status(201).json({ success: true, message: "Order securely saved to database!" });
@@ -140,7 +144,11 @@ app.put('/api/orders/:id', async (req, res) => {
   }
 });
 
-// ─── ROOT ────────────────────────────────────────────────────
+// ─── SUPER-APP ROUTES ─────────────────────────────────────────
+app.use('/api/vendors',  vendorRoutes);
+app.use('/api/products', productRoutes);
+
+// ─── ROOT ─────────────────────────────────────────────────────
 app.get('/', (req, res) => {
   res.send('CampusConnect Backend is officially alive!');
 });

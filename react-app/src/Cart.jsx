@@ -1,98 +1,137 @@
 import { useContext } from 'react';
 import { CartContext } from './CartContext';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 
 const Cart = () => {
-  
   const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
-
-  
   const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-
-  
+  const itemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 font-sans flex flex-col">
-      <div className="flex items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <Link to="/" className="text-gray-400 font-bold mr-4 hover:text-gray-800 transition">
-          ← Back
-        </Link>
-        <h1 className="text-2xl font-black text-gray-800 tracking-tight">Your Cart</h1>
-      </div>
-
-      {cart.length === 0 ? (
-        <div className="flex-grow flex flex-col items-center justify-center text-center mt-10">
-          <div className="text-6xl mb-4">🛒</div>
-          <h2 className="text-xl font-bold text-gray-700 mb-2">Cart is empty!</h2>
-          <p className="text-gray-500 mb-8 font-medium">Looks like you haven't added any food yet.</p>
-          <Link to="/menu" className="bg-orange-50 text-orange-600 border border-orange-200 px-8 py-3 rounded-xl font-bold hover:bg-orange-100 transition-all">
-            Browse Menu
+    <div className="min-h-screen bg-[#f8f7f4] font-sans">
+      {/* Header */}
+      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100"
+        style={{ WebkitBackdropFilter: 'blur(20px)' }}>
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
+          <Link to="/menu" className="flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors">
+            <ArrowLeft size={15} className="text-slate-600" strokeWidth={2.5} />
           </Link>
-        </div>
-      ) : (
-        <div className="flex-grow flex flex-col gap-3">
-          {cart.map((item, index) => (
-            <div key={index} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              
-              
-              <div className="flex-grow">
-                <h3 className="text-lg font-bold text-gray-800">{item.name}</h3>
-                <p className="text-gray-500 font-medium">₹{item.price} each</p>
-              </div>
-              
-              
-              <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                
-                
-                <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                  <button 
-                    onClick={() => updateQuantity(index, -1)}
-                    className="w-8 h-8 flex items-center justify-center text-gray-600 font-bold bg-white rounded shadow-sm hover:bg-gray-50 active:scale-95 transition"
-                  >
-                    -
-                  </button>
-                  <span className="w-8 text-center font-bold text-gray-800">
-                    {item.quantity || 1}
-                  </span>
-                  <button 
-                    onClick={() => updateQuantity(index, 1)}
-                    className="w-8 h-8 flex items-center justify-center text-gray-600 font-bold bg-white rounded shadow-sm hover:bg-gray-50 active:scale-95 transition"
-                  >
-                    +
-                  </button>
-                </div>
-
-                
-                <button 
-                  onClick={() => removeFromCart(index)}
-                  className="text-red-500 font-bold bg-red-50 p-2 rounded-lg hover:bg-red-100 active:scale-95 transition-all flex items-center justify-center"
-                  aria-label="Remove item"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-
-              </div>
-            </div>
-          ))}
-
-          
-          <div className="mt-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-            <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
-              <span className="text-gray-500 font-bold text-lg">Item Total</span>
-              <span className="text-2xl font-black text-gray-800">₹{total}</span>
-            </div>
-            
-            <Link 
-              to="/checkout" 
-              className="block w-full text-center bg-green-500 text-white text-lg font-bold py-4 rounded-xl shadow-md hover:bg-green-600 active:scale-95 transition-all"
-            >
-              Proceed to Checkout (₹{total})
-            </Link>
+          <div>
+            <h1 className="text-[16px] font-black text-slate-800 leading-none">Your Cart</h1>
+            {cart.length > 0 && <p className="text-[11px] text-slate-400 mt-0.5">{itemCount} item{itemCount !== 1 ? 's' : ''}</p>}
           </div>
         </div>
-      )}
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 py-5">
+        {cart.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center justify-center text-center pt-24"
+          >
+            <div className="w-20 h-20 bg-orange-50 rounded-3xl flex items-center justify-center mb-5">
+              <ShoppingBag size={32} className="text-orange-300" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-[20px] font-black text-slate-700 mb-2">Cart is empty</h2>
+            <p className="text-slate-400 text-[14px] mb-6">Add some delicious food to get started!</p>
+            <Link to="/menu" className="bg-orange-500 text-white font-black text-[14px] px-8 py-3 rounded-2xl shadow-lg shadow-orange-200 hover:bg-orange-600 transition-colors">
+              Browse Menu
+            </Link>
+          </motion.div>
+        ) : (
+          <>
+            <div className="space-y-3 mb-5">
+              <AnimatePresence>
+                {cart.map((item, index) => (
+                  <motion.div
+                    key={item._id || index}
+                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                    className="bg-white rounded-2xl p-4 flex items-center gap-4 border border-slate-100"
+                    style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+                  >
+                    {/* Emoji */}
+                    <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-2xl">
+                      {item.emoji || '🍽️'}
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[14px] font-black text-slate-800 truncate">{item.name}</p>
+                      <p className="text-[13px] text-orange-500 font-bold">₹{item.price} each</p>
+                    </div>
+
+                    {/* Quantity controls */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <motion.button
+                        whileTap={{ scale: 0.88 }}
+                        onClick={() => updateQuantity(index, -1)}
+                        className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
+                      >
+                        <Minus size={12} strokeWidth={3} className="text-slate-600" />
+                      </motion.button>
+                      <span className="w-6 text-center text-[14px] font-black text-slate-800">{item.quantity || 1}</span>
+                      <motion.button
+                        whileTap={{ scale: 0.88 }}
+                        onClick={() => updateQuantity(index, 1)}
+                        className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
+                      >
+                        <Plus size={12} strokeWidth={3} className="text-white" />
+                      </motion.button>
+                    </div>
+
+                    {/* Subtotal + delete */}
+                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                      <p className="text-[13px] font-black text-slate-700">₹{item.price * (item.quantity || 1)}</p>
+                      <motion.button
+                        whileTap={{ scale: 0.88 }}
+                        onClick={() => removeFromCart(index)}
+                        className="w-6 h-6 rounded-lg bg-red-50 flex items-center justify-center hover:bg-red-100 transition-colors"
+                      >
+                        <Trash2 size={11} className="text-red-400" strokeWidth={2.5} />
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {/* Bill Summary */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+              className="bg-white rounded-2xl p-5 border border-slate-100 mb-5"
+              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+            >
+              <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Bill Summary</p>
+              <div className="space-y-2.5">
+                <div className="flex justify-between text-[13px] text-slate-500">
+                  <span>Item total</span><span className="font-semibold text-slate-700">₹{total}</span>
+                </div>
+                <div className="flex justify-between text-[13px] text-slate-500">
+                  <span>Delivery fee</span><span className="font-semibold text-green-500">FREE</span>
+                </div>
+                <div className="border-t border-dashed border-slate-200 pt-2.5 flex justify-between">
+                  <span className="text-[14px] font-black text-slate-800">Total</span>
+                  <span className="text-[18px] font-black text-orange-500">₹{total}</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Checkout Button */}
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Link to="/checkout"
+                className="flex items-center justify-between w-full bg-orange-500 hover:bg-orange-600 text-white px-6 py-4 rounded-2xl shadow-lg shadow-orange-200 transition-colors"
+              >
+                <span className="text-[15px] font-black">Proceed to Checkout</span>
+                <span className="text-[15px] font-black">₹{total} →</span>
+              </Link>
+            </motion.div>
+          </>
+        )}
+      </div>
     </div>
   );
 };

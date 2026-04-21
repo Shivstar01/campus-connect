@@ -12,7 +12,7 @@ const MenuItem = require('./models/MenuItem');
 // ─── New Super-App Routes ────────────────────────────────────
 const vendorRoutes  = require('./routes/vendorRoutes');
 const productRoutes = require('./routes/productRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+
 // Razorpay payment routes
 
 const app = express();
@@ -149,7 +149,7 @@ app.put('/api/orders/:id', async (req, res) => {
 // ─── SUPER-APP ROUTES ─────────────────────────────────────────
 app.use('/api/vendors',  vendorRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/payments', paymentRoutes);   
+ 
 
 // ─── ROOT ─────────────────────────────────────────────────────
 app.get('/', (req, res) => {

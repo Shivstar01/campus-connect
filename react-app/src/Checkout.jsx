@@ -1,8 +1,3 @@
-// react-app/src/Checkout.jsx
-// ─────────────────────────────────────────────────────────────
-// Polished mock payment — realistic card UI, no real gateway.
-// Looks and feels like a real payment flow for demos/portfolio.
-// ─────────────────────────────────────────────────────────────
 
 import { useState, useContext, useCallback } from 'react';
 import { CartContext } from './CartContext';
@@ -11,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, MapPin, User, CheckCircle, Lock, CreditCard, Calendar, Shield } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
-// ── Tiny helpers ─────────────────────────────────────────────
+
 const formatCardNumber = (val) =>
   val.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
 
@@ -94,11 +89,16 @@ const Checkout = () => {
         paymentId:    `mock_${Date.now()}`,
       };
 
-      const res  = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(newOrder),
-      });
+      const token = localStorage.getItem('token');
+
+const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+  method:  'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify(newOrder),
+});
       const data = await res.json();
 
       if (data.success) {

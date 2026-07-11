@@ -9,7 +9,7 @@ import {
   BookOpen, Printer, ShoppingBag, Zap, Coffee
 } from 'lucide-react';
 
-// ─── Animation variants ───────────────────────────────────────
+
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: (i = 0) => ({
@@ -23,7 +23,7 @@ const staggerContainer = {
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-// ─── Static display data ──────────────────────────────────────
+
 const DEALS = [
   { id: 1, emoji: '🍕', title: 'Veg Supreme Thali', tag: '40% OFF',    sub: 'Hostel Mess · Today only',      color: 'from-orange-500 to-rose-500' },
   { id: 2, emoji: '📓', title: 'A4 Notebook Deal',  tag: 'COMBO DEAL', sub: 'Campus Needs · Limited stock',  color: 'from-blue-500 to-indigo-500' },
@@ -40,14 +40,14 @@ const CATEGORIES = [
   { label: 'Express',    icon: Zap,             color: '#ef4444', vendorType: 'Food' },
 ];
 
-// Map vendorType → visual identity
+
 const VENDOR_STYLE = {
   Food:        { emoji: '🍛', bg: 'from-orange-50 to-amber-50',   badge: 'bg-orange-100 text-orange-700',  accent: '#f97316' },
   Stationery:  { emoji: '📚', bg: 'from-blue-50 to-indigo-50',    badge: 'bg-blue-100 text-blue-700',      accent: '#3b82f6' },
   Print:       { emoji: '🖨️', bg: 'from-violet-50 to-purple-50', badge: 'bg-violet-100 text-violet-700',  accent: '#8b5cf6' },
 };
 
-// ─── Component ────────────────────────────────────────────────
+
 const Home = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const Home = () => {
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
 
-  // Fetch real vendors from the backend
+  
   useEffect(() => {
     const fetchVendors = async () => {
       try {

@@ -3,6 +3,24 @@
 const jwt = require('jsonwebtoken');
 const partyRooms = new Map();
 
+// ─── Per-socket rate limiter ───────────────────────────────────────────────
+// Prevents spam attacks like firing add_to_cart thousands of times per second.
+const rateLimitMap = new Map();
+const RATE_LIMIT_MAX    = 20;   // max events per window
+const RATE_LIMIT_WINDOW = 1000; // 1 second window in ms
+
+function checkRateLimit(socketId) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(socketId);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(socketId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  entry.count += 1;
+  if (entry.count > RATE_LIMIT_MAX) return false;
+  return true;
+}
+
 function sanitizeString(value) {
   if (typeof value !== 'string') return '';
   return value
@@ -153,6 +171,9 @@ function initPartySocket(io) {
     // ── add_to_cart ───────────────────────────────────────────────────────
     socket.on('add_to_cart', (rawPayload, ack) => {
       try {
+        if (!checkRateLimit(socket.id)) {
+          return typeof ack === 'function' && ack({ ok: false, error: 'Rate limit exceeded. Slow down.' });
+        }
         const partyId = socket.currentPartyId;
         if (!partyId) throw new Error('Not in a party. Call join_party first.');
 
@@ -303,6 +324,7 @@ function initPartySocket(io) {
 
     // ── disconnect ────────────────────────────────────────────────────────
     socket.on('disconnect', (reason) => {
+      rateLimitMap.delete(socket.id);
       console.log(`[PartySocket] Disconnect: userId=${userId} socketId=${socket.id} reason=${reason}`);
       const vacatedPartyId = evictSocket(socket.id);
       if (vacatedPartyId) {

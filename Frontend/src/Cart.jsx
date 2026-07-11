@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import PartyCart from './PartyCart';
-import { SocketProvider } from './SocketContext';
 
 
 const Cart = () => {
@@ -126,7 +125,7 @@ const Cart = () => {
             {/* Party Mode */} 
             <motion.div
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-              classnName="mb-5"
+              className="mb-5"
               >
                 
                   <PartyCart />

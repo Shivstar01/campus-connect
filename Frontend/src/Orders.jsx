@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
 
 const Orders = () => {
+  const { token } = useContext(AuthContext);
   const [liveOrders, setLiveOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -9,7 +11,9 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const data = await response.json();
         setLiveOrders(data);
         setLoading(false);
@@ -19,17 +23,19 @@ const Orders = () => {
       }
     };
 
+    if (!token) return;
     fetchOrders();
     const interval = setInterval(fetchOrders, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [token]);
 
   
   const handleComplete = async (orderId) => {
     try {
       
       await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, {
-        method: 'PUT'
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       

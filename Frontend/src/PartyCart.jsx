@@ -1,18 +1,8 @@
-/**
- * PartyCart.jsx — CampusConnect Party Mode UI
- *
- * Drop this component wherever you want to expose Party Mode in the app.
- * It is self-contained: reads from usePartyCart() and renders the full
- * join / active-party experience.
- *
- * Styling: Tailwind v4 utility classes consistent with the existing app.
- */
-
 import { useState, useRef } from 'react';
 import { usePartyCart } from './hooks/usePartyCart';
 import { useSocket } from './SocketContext';
 
-// ── Small UI helpers ───────────────────────────────────────────────────────
+
 
 function StatusDot({ connected }) {
   return (
@@ -55,7 +45,7 @@ function CartItemRow({ item, onIncrement, onDecrement, onRemove }) {
   );
 }
 
-// ── Main component ─────────────────────────────────────────────────────────
+
 
 export default function PartyCart() {
   const { connected } = useSocket();
@@ -71,14 +61,14 @@ export default function PartyCart() {
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // ── Generate a random party ID for "Create Party" ──────────────────────
+ 
   const generatePartyId = () => {
     const id = Math.random().toString(36).slice(2, 8).toUpperCase();
     setInputId(id);
     inputRef.current?.focus();
   };
 
-  // ── Join / create party ────────────────────────────────────────────────
+  
   const handleJoin = async () => {
     const id = inputId.trim();
     if (!id) {
@@ -93,13 +83,12 @@ export default function PartyCart() {
     }
   };
 
-  // ── Quantity helpers ───────────────────────────────────────────────────
   const handleIncrement = (itemId) => updateQuantity(itemId, 1).catch(console.error);
   const handleDecrement = (itemId) => updateQuantity(itemId, -1).catch(console.error);
   const handleRemove    = (itemId) => removeFromCart(itemId).catch(console.error);
   const handleClear     = ()       => clearCart().catch(console.error);
 
-  // ── Render: not connected ──────────────────────────────────────────────
+ 
   
   if (!connected) {
     return (
@@ -112,7 +101,6 @@ export default function PartyCart() {
     );
   }
 
-  // ── Render: join screen ────────────────────────────────────────────────
   if (!isInParty) {
     return (
       <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm space-y-4 max-w-sm mx-auto">
@@ -168,7 +156,7 @@ export default function PartyCart() {
     );
   }
 
-  // ── Render: active party ───────────────────────────────────────────────
+  
   return (
     <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm overflow-hidden max-w-sm mx-auto">
       {/* Header */}

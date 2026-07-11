@@ -5,15 +5,16 @@ import { AuthContext } from './AuthContext';
 
 export const SocketContext = createContext(null);
 
+
 let socketInstance = null;
+
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
 export const SocketProvider = ({ children }) => {
   const { token } = useContext(AuthContext);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-
-    console.log('TOKEN VALUE:',token);
     if (!token) return;
 
     if (socketInstance) {
@@ -21,20 +22,28 @@ export const SocketProvider = ({ children }) => {
       socketInstance = null;
     }
 
-    socketInstance = io('http://localhost:5000', {
+    socketInstance = io(SOCKET_URL, {
       auth: { token },
-      transports: ['polling'],
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 10000,
     });
 
     socketInstance.on('connect', () => {
-      console.log('connected!', socketInstance.id);
       setConnected(true);
     });
 
     socketInstance.on('disconnect', () => setConnected(false));
 
+    socketInstance.on('connect_error', (err) => {
+      console.error('[Socket] Connection error:', err.message);
+      setConnected(false);
+    });
+
     return () => {
-      // intentionally not disconnecting on cleanup to survive StrictMode
+    
     };
   }, [token]);
 

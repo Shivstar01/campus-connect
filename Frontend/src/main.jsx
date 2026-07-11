@@ -5,8 +5,10 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './AuthContext'
 import { SocketProvider } from './SocketContext'
+import ErrorBoundary from './ErrorBoundary'
 
 createRoot(document.getElementById('root')).render(
+  <ErrorBoundary>
     <BrowserRouter>
       <AuthProvider>
         <SocketProvider>
@@ -14,5 +16,5 @@ createRoot(document.getElementById('root')).render(
         </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
-  
+  </ErrorBoundary>
 )

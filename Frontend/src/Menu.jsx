@@ -3,6 +3,9 @@ import { CartContext } from './CartContext';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Search, ArrowLeft, Plus, Store } from 'lucide-react';
+import {usePartyCart} from './hooks/usePartyCart';
+
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -23,7 +26,7 @@ const Menu = () => {
   const { vendorId } = useParams();          // comes from /menu/:vendorId
   const navigate = useNavigate();
   const { addToCart, cart } = useContext(CartContext);
-
+  const {addToCart: partyAddToCart, isInParty } = usePartyCart();
   const [vendor, setVendor]       = useState(null);
   const [products, setProducts]   = useState([]);
   const [loading, setLoading]     = useState(true);
@@ -79,11 +82,13 @@ const Menu = () => {
     return matchesCat && matchesSearch;
   });
 
-  const handleAdd = (product) => {
-    addToCart(product);
-    setAddedIds(prev => ({ ...prev, [product._id]: true }));
-    setTimeout(() => setAddedIds(prev => ({ ...prev, [product._id]: false })), 900);
-  };
+ const handleAdd = (product) => {
+  addToCart(product);                        
+  if (isInParty) partyAddToCart(product);    
+
+  setAddedIds(prev => ({ ...prev, [product._id]: true }));
+  setTimeout(() => setAddedIds(prev => ({ ...prev, [product._id]: false })), 900);
+};
 
   // ── Loading state ─────────────────────────────────────────
   if (loading) {
